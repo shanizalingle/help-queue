@@ -2,14 +2,22 @@ import React from 'react';
 import NewTicketForm from './NewTicketForm';
 import TicketList from './TicketList';
 import Question from './Question';
+
 class TicketControl extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       formVisibleOnPage: false,
-      count: 0
+      count: 0,
+      mainTicketList: []
     };
+  }
+
+  handleAddingNewTicketToList = (newTicket) => {
+    const newMainTicketList = this.state.mainTicketList.concat(newTicket);
+    this.setState({mainTicketList: newMainTicketList,
+                  formVisibleOnPage: false });
   }
 
   handleClick = () => {
@@ -33,10 +41,10 @@ class TicketControl extends React.Component {
       currentlyVisibleState = <Question questionNumber = {3} questionText = "Have you spent 15 minutes going through through the problem documenting every step?"/>;
       buttonText = "Yes"; 
     } else if (this.state.formVisibleOnPage) {
-      currentlyVisibleState = <TicketList/>;
+      currentlyVisibleState = <TicketList ticketList={this.state.mainTicketList} />;
       buttonText = "Add Ticket"; 
     } else {
-      currentlyVisibleState = <NewTicketForm />
+      currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList} />
       buttonText= 'Return to ticket list';
     }
     return (
